@@ -10,14 +10,39 @@ void listUsers(std::string msg = "Available users: "){
     system("cat /etc/passwd | grep -E \"1[0-9]{3}\"");
 }
 
+void get_popen() {
+    FILE *pf;
+    char command[20];
+    char data[512];
+
+    // Execute a process listing
+    sprintf(command, "ps"); 
+
+    // Setup our pipe for reading and execute our command.
+    pf = popen(command,"r"); 
+
+    // Error handling
+
+    // Get the data from the process execution
+    fgets(data, 512 , pf);
+    std::cout << data << "------------------------" << std::endl;
+
+    // the data is now in 'data'
+
+    if (pclose(pf) != 0)
+        fprintf(stderr," Error: Failed to close command stream \n");
+
+    return;
+}
+
 int main(int argc, char *argv[]){
 
+    get_popen();
     listUsers();
     std::cout << "Current user: " << std::endl;
     system("id -u -n");
     std::cout << std::endl;
 
-    system("ls -halt");
 
 
     std::string cmnd;
@@ -31,9 +56,11 @@ int main(int argc, char *argv[]){
     listUsers();    
 
 
-    std::string su = "sudo su ";
-    cmnd = su + name;
-    system(cmnd.c_str());
+    std::string groupadd = "sudo groupadd groupname";
+    std::string groupdel = "sudo groupdel groupname";
+    // std::string su = "sudo su ";
+    // cmnd = su + name;
+    // system(cmnd.c_str());
     std::string whoami = "whoami";
     cmnd = whoami; // TODO : opens a new shell and commands not executing in it
     system(cmnd.c_str());
