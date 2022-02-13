@@ -78,17 +78,25 @@ void set_popen(const char *command, const char *data) {
 
 int main(int argc, char *argv[]){
 
+    const std::string red("\033[0;31m"); 
+    const std::string reset("\033[0m");
+    std::cout << red << std::endl;
     listUsers();
-    std::cout << std::endl;
+    std::cout << reset << std::endl;
 
     std::string user = get_popen("id -u -n");
-    std::cout << "Current user:  "<<user << "\n------------------------\n" << std::endl;
+    user.erase(user.end()-1);
+    std::cout << "Current user:  "<< user << "\n------------------------\n" << std::endl;
+
+    std::string cmnd;
+    // build a command string and then pass it to system(const char* command)
+    std::string name = ADMIN;
 
     // Different types of users have differnt commands
     std::string X = "X", Y = "Y", Z = "Z";
-    if(user.compare(ADMIN)){
 
-        std::string cmnd;
+    if(user == ADMIN){
+
         std::cout << "I am currently " << user <<"!" << std::endl;
         std::cout << "Please Enter name X" << std::endl;
         std::cin >> X;
@@ -97,35 +105,41 @@ int main(int argc, char *argv[]){
         std::cout << "Please Enter name Z" << std::endl;
         std::cin >> Z;
 
-        cmnd = "echo " + X + Y + Z + " > file.txt";
+        std::string filename = "file.txt";
+        cmnd = "echo " + X + Y + Z + " > " + filename;
         set_popen(cmnd.c_str(), cmnd.c_str());
-    }
-    else if(user.compare(HEAD)){
 
+        std::string groupadd = "sudo usermod -a -G sudo admin";
+        cmnd = groupadd;
+        system(cmnd.c_str());
+
+    }
+    else if(user == HEAD){
+
+        std::string filedata = get_popen("cat file.txt");
+        std::cout << "filedata: " << filedata << std::endl;
         std::cout << "I am currently " << user <<"! Please access: " << X << " " << Y << " " << Z<< std::endl;
     }
-    else if(user.compare(EDUCATOR)){
+    else if(user == EDUCATOR){
 
         std::cout << "I am currently " << user <<"! Please access: " << Y << std::endl;
     }
-    else if(user.compare(STUDENT)){
+    else if(user == STUDENT){
 
         std::cout << "I am currently " << user <<"! Please access" << X << std::endl;
     }
 
+    else{
+        // the starting user (eg:amit) that initiates the program and adds admin
 
+        std::string adduser = "sudo adduser ";
+        cmnd = adduser + name;
+        system(cmnd.c_str());           // i.e system("sudo adduser name")
+        // system("sudo useradd -m admin_os"); system(""sudo passwd admin_os");
+        std::cout << "=== Create done ===" << std::endl;
+        listUsers();    
 
-
-    std::string cmnd;
-    // build a command string and then pass it to system(const char* command)
-    std::string name = ADMIN;
-    std::string adduser = "sudo adduser ";
-    cmnd = adduser + name;
-    system(cmnd.c_str());           // i.e system("sudo adduser name")
-    // system("sudo useradd -m admin_os"); system(""sudo passwd admin_os");
-    std::cout << "=== Create done ===" << std::endl;
-    listUsers();    
-
+    }
 
     std::string groupadd = "sudo groupadd groupname";
     std::string groupdel = "sudo groupdel groupname";
@@ -151,5 +165,4 @@ int main(int argc, char *argv[]){
         std::cout << "=== Delete done ===" << std::endl;
     }
 
-    // execl("/bin/sh", "sh", "-c", command, (char *) 0);
 }

@@ -13,7 +13,7 @@ CCFLAGS = -std=c++17 -Wall -g
 
 all: main.cc
 	${CC}  $^ -o main
-	./main
+	chmod +777 main
 
 
 .PHONY: all clean
