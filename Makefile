@@ -1,8 +1,23 @@
-CPPFLAGS = -std=c++17
+# compiles and runs the main file. on repeated runs, compiles only the updated files
+# TARGET: DEPENDENCY
+#   <TAB> COMMAND
+#
+# automatic variables
+# $@ = used for target variable
+# $< = the 1st prerequisite
+# $^ = all of the above prerequisites
+#
+
+CC = c++
+CCFLAGS = -std=c++17 -Wall -g
 
 all: main.cc
-	g++ ${CPPFLAGS} main.cc -o main
+	${CC}  $^ -o main
 	./main
 
+
+.PHONY: all clean
+	# specifically specifying that these are not file name
 clean:
-	rm -rf main
+	rm -rvf *.o *.out *.exe main
+

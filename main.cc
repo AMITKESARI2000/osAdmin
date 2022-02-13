@@ -3,6 +3,12 @@
 #include <string>
 #include <cstring>
 
+const int BUFFSIZE = 512;
+const std::string ADMIN = "admin";
+const std::string HEAD = "head";
+const std::string EDUCATOR = "educator";
+const std::string STUDENT = "student";
+
 void listUsers(std::string msg = "Available users: "){
 
     std::cout << msg << std::endl;
@@ -10,44 +16,109 @@ void listUsers(std::string msg = "Available users: "){
     system("cat /etc/passwd | grep -E \"1[0-9]{3}\"");
 }
 
-void get_popen() {
+/**
+ * @brief used for taking in command's output to pipe through popen() makeing use of IPC.
+ *          command is used for coomand to excute and get back output to user.
+ *
+ * @param command
+ * @return string
+ *
+ */
+std::string get_popen(const char *command) {
     FILE *pf;
-    char command[20];
-    char data[512];
-
-    // Execute a process listing
-    sprintf(command, "ps"); 
+    char data[BUFFSIZE];
+    std::string result;
 
     // Setup our pipe for reading and execute our command.
-    pf = popen(command,"r"); 
+    pf = popen(command, "r"); 
 
-    // Error handling
 
     // Get the data from the process execution
-    fgets(data, 512 , pf);
-    std::cout << data << "------------------------" << std::endl;
+    fgets(data, BUFFSIZE , pf);
 
     // the data is now in 'data'
 
+    // Error handling
+    if (pclose(pf) != 0)
+        fprintf(stderr," Error: Failed to close command stream \n");
+
+    result = data;
+    return result;
+}
+
+/**
+ * @brief used for passing commands to pipe through popen() makeing use of IPC.
+ *          command is used for commands to be executed and output passed.
+ *
+ * @param command
+ * @param data
+ *
+ */
+
+void set_popen(const char *command, const char *data) {
+    FILE *pf;
+    // char data[BUFFSIZE];
+
+    // Setup our pipe for writing to file according to our command.
+    pf = popen(command, "w"); 
+
+
+    // Set the data from the process execution
+    fputs(data , pf);
+
+    // the data is now written to file
+
+    // Error handling
     if (pclose(pf) != 0)
         fprintf(stderr," Error: Failed to close command stream \n");
 
     return;
 }
 
+
 int main(int argc, char *argv[]){
 
-    get_popen();
     listUsers();
-    std::cout << "Current user: " << std::endl;
-    system("id -u -n");
     std::cout << std::endl;
+
+    std::string user = get_popen("id -u -n");
+    std::cout << "Current user:  "<<user << "\n------------------------\n" << std::endl;
+
+    // Different types of users have differnt commands
+    std::string X = "X", Y = "Y", Z = "Z";
+    if(user.compare(ADMIN)){
+
+        std::string cmnd;
+        std::cout << "I am currently " << user <<"!" << std::endl;
+        std::cout << "Please Enter name X" << std::endl;
+        std::cin >> X;
+        std::cout << "Please Enter name Y" << std::endl;
+        std::cin >> Y;
+        std::cout << "Please Enter name Z" << std::endl;
+        std::cin >> Z;
+
+        cmnd = "echo " + X + Y + Z + " > file.txt";
+        set_popen(cmnd.c_str(), cmnd.c_str());
+    }
+    else if(user.compare(HEAD)){
+
+        std::cout << "I am currently " << user <<"! Please access: " << X << " " << Y << " " << Z<< std::endl;
+    }
+    else if(user.compare(EDUCATOR)){
+
+        std::cout << "I am currently " << user <<"! Please access: " << Y << std::endl;
+    }
+    else if(user.compare(STUDENT)){
+
+        std::cout << "I am currently " << user <<"! Please access" << X << std::endl;
+    }
+
 
 
 
     std::string cmnd;
     // build a command string and then pass it to system(const char* command)
-    std::string name = "admin";
+    std::string name = ADMIN;
     std::string adduser = "sudo adduser ";
     cmnd = adduser + name;
     system(cmnd.c_str());           // i.e system("sudo adduser name")
@@ -66,6 +137,7 @@ int main(int argc, char *argv[]){
     system(cmnd.c_str());
 
 
+    // cleanup and deleting of users
     char y = 'y';
 
     std::cout << "Delete user?[Y/n]" << std::endl;
