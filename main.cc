@@ -65,7 +65,7 @@ void set_popen(const char *command, const char *data) {
 
     // Setup our pipe for writing to file according to our command.
     pf = popen(command, "w");
-
+   //std::cout<<data<<std::endl;
     // Set the data from the process execution
     fputs(data, pf);
 
@@ -90,17 +90,17 @@ void add_user(std::string name) {
 void delete_user(std::string name) {
     // cleanup and deleting of users
     char y = 'y';
-
     std::cout << "Delete user " << name <<" ?[Y/n]" << std::endl;
     y = getchar();
     if (y == 'y' || y=='Y' || y == '\n') {
         std::string cmnd;
 
         std::cout << "Deleting..." << name << std::endl;
-
+        //std::cout<<name.size()<<std::endl;   
         std::string userdel = "sudo userdel -r ";
-        cmnd = userdel + name + " >/dev/null 2>&1";
-        system(cmnd.c_str());  // system("sudo userdel -r name");
+        //cmnd = userdel + name + " >/dev/null 2>&1";
+        std::string rmuser = "sudo rmuser -y "+name;
+        system(rmuser.c_str());  // system("sudo rmuser -y  name");
         std::cout << "=== Delete done ===" << std::endl;
     }
 }
@@ -115,7 +115,7 @@ int main(int argc, char *argv[]) {
 
     std::string cmnd;
     // build a command string and then pass it to system(const char* command)
-    std::string name = EDUCATOR;
+    std::string name = ADMIN;
 
     // Different types of users have different commands
     std::string X = "X", Y = "Y", Z = "Z";
@@ -123,22 +123,25 @@ int main(int argc, char *argv[]) {
     if (user == ADMIN) {
         std::cout << "I am currently " << user << "!" << std::endl;
         std::cout << "Please Enter name X" << std::endl;
-        std::cin >> X;
+        getline(std::cin,X);
+
         std::cout << "Please Enter name Y" << std::endl;
-        std::cin >> Y;
-        std::cout << "Please Enter name Z" << std::endl;
-        std::cin >> Z;
+       getline(std::cin,Y);
+
+       std::cout << "Please Enter name Z" << std::endl;
+        getline(std::cin,Z);
 
         std::string filename = "file.txt";
-        cmnd = "echo " + X + ";" + Y + ";" + Z + " > " + filename;
-        set_popen(cmnd.c_str(), cmnd.c_str());
+        cmnd = "echo \"" + X + ";" + Y + ";" + Z + "\"  > " + filename;
+        //std::string output=system(cmnd.c_str());
+        set_popen(cmnd.c_str(),cmnd.c_str());
 
-        std::string groupadd = "sudo usermod -a -G sudo admin";
-        cmnd = groupadd;
-        system(cmnd.c_str());
-        add_user("head");
-        add_user("student");
-        add_user("educator");
+        //std::string groupadd = "sudo usermod -a -G sudo admin";
+        //cmnd = groupadd;
+        //system(cmnd.c_str());
+        add_user(HEAD);
+        add_user(STUDENT);
+        add_user(EDUCATOR);
     } else if (user == HEAD) {
         std::string filedata = get_popen("cat file.txt");
 

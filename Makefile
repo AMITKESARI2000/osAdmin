@@ -12,7 +12,7 @@ CC = c++
 CCFLAGS = -std=c++17 -Wall -g
 
 all: main.cc
-	${CC} -o main $^
+	${CC} -o main main.cc
 	chmod 777 main
 
 
