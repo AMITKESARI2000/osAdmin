@@ -136,14 +136,19 @@ int main(int argc, char *argv[]) {
     std::string X = "X", Y = "Y", Z = "Z";
 
     if (user == ADMIN) {
-        std::cout << "I am currently " << user << "!" << std::endl;
-        std::cout << "Please Enter name X" << std::endl;
+        std::cout << "Hello Admin\n";
+        std::cout << "You have the permission to:\n";
+        std::cout << "\tView and Edit data in File X, File Y, File Z.\n";
+        std::cout << "\tAdd students, educators and heads in their respective groups.\n";
+        std::cout << "\tRestrict and modify permissions of any file or users.\n\n";
+
+        std::cout << "Please Enter X" << std::endl;
         getline(std::cin, X);
 
-        std::cout << "Please Enter name Y" << std::endl;
+        std::cout << "Please Enter Y" << std::endl;
         getline(std::cin, Y);
 
-        std::cout << "Please Enter name Z" << std::endl;
+        std::cout << "Please Enter Z" << std::endl;
         getline(std::cin, Z);
 
         std::string filename = "file.txt";
@@ -158,6 +163,10 @@ int main(int argc, char *argv[]) {
         our_user.add_user(STUDENT, display_info);
         our_user.add_user(EDUCATOR, display_info);
     } else if (user == HEAD) {
+        std::cout << "Hello Head\n";
+        std::cout << "You have the permission to:\n";
+        std::cout << "\tView the data in File X, File Y, File Z.\n";
+
         std::string filedata = utilities.get_popen("cat file.txt");
 
         X = "";
@@ -180,9 +189,15 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        std::cout << "I am currently " << user << "! Please access: " << X
-                  << " " << Y << " " << Z << std::endl;
+        std::cout << "Data in File X: " << X << std::endl;
+        std::cout << "Data in File Y: " << Y << std::endl;
+        std::cout << "Data in File Z: " << Z << std::endl;
     } else if (user == EDUCATOR) {
+
+        std::cout << "Hello Educator\n";
+        std::cout << "You have the permission to:\n";
+        std::cout << "\tView the data in File Y.\n";
+
         std::string filedata = utilities.get_popen("cat file.txt");
         Y = "";
 
@@ -197,9 +212,13 @@ int main(int argc, char *argv[]) {
                 Y += filedata[i];
             }
         }
-        std::cout << "I am currently " << user << "! Please access: " << Y
-                  << std::endl;
+        std::cout << "Data in File Y: " << Y << std::endl;
     } else if (user == STUDENT) {
+
+        std::cout << "Hello Student\n";
+        std::cout << "You have the permission to:\n";
+        std::cout << "\tView the data in File X.\n";
+
         std::string filedata = utilities.get_popen("cat file.txt");
 
         X = "";
@@ -210,8 +229,8 @@ int main(int argc, char *argv[]) {
             }
             X += filedata[i];
         }
-        std::cout << "I am currently " << user << "! Please access: " << X
-                  << std::endl;
+
+        std::cout << "Data in File X: " << X << std::endl;
     } else {
         // the starting user (eg:amit) that initiates the program and adds admin
         our_user.add_user(name, display_info);
@@ -223,7 +242,7 @@ int main(int argc, char *argv[]) {
     // cmnd = su + name;
     // system(cmnd.c_str());
 
-    std::cout << "\n-------\n";
+    std::cout << "\n---------------------------\n";
 
     our_user.delete_user(name);
 }
