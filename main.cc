@@ -292,9 +292,9 @@ int main(int argc, char *argv[]) {
 
         std::string filedata = utilities.get_popen("cat file.txt");
 
-        X = utilities.get_popen("cat xdata.txt");
-        Y = utilities.get_popen("cat ydata.txt");
-        Z = utilities.get_popen("cat zdata.txt");
+        X = utilities.get_popen("cat xdata");
+        Y = utilities.get_popen("cat ydata");
+        Z = utilities.get_popen("cat zdata");
         /*
 		int cnt = 0;
 
@@ -321,7 +321,7 @@ int main(int argc, char *argv[]) {
         std::cout << "You have the permission to:\n";
         std::cout << "\tView the data in File Y.\n";
 
-        Y = utilities.get_popen("cat ydata.txt");
+        Y = utilities.get_popen("cat ydata");
 
         std::cout << "Data in File Y: " << Y << std::endl;
     } else if (user == STUDENT) {
@@ -331,7 +331,7 @@ int main(int argc, char *argv[]) {
         std::cout << "\tView the data in File X.\n";
 
 
-        X =  utilities.get_popen("cat xdata.txt");
+        X =  utilities.get_popen("cat xdata");
 
         std::cout << "Data in File X: " << X << std::endl;
     } else {
