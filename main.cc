@@ -10,7 +10,12 @@ const std::string HEAD = "head";
 const std::string EDUCATOR = "educator";
 const std::string STUDENT = "student";
 
-// different colour pallete for colour printing, remeber to use reset at last
+const std::string ADMIN_GROUP = "admins";
+const std::string HEAD_GROUP = "heads";
+const std::string EDUCATOR_GROUP = "educators";
+const std::string STUDENT_GROUP= "students";
+
+// different colour pallete for colour printing, remember to use reset at last
 const std::string red("\033[0;31m");
 const std::string green("\033[1;32m");
 const std::string yellow("\033[1;33m");
@@ -104,7 +109,7 @@ class User {
          * @param display_info
          * 
          */
-        void add_user(std::string name, DisplayInfo display_info) {
+        void add_user(std::string username, DisplayInfo display_info) {
 
             /*
                std::string adduser = "sudo adduser ";
@@ -113,9 +118,6 @@ class User {
             // system("sudo useradd -m admin_os"); system(""sudo passwd admin_os");
             */
             std::cout << cyan << std::endl;
-            string username;
-            std::cout << "Enter the new username: ";
-            getline(cin, username);
             std::string adduser = "sudo pw user add ";
             std::string cmnd = adduser + username;
             system(cmnd.c_str());  // i.e system("sudo pw user add <username>")
@@ -166,25 +168,25 @@ void add_new_group(string types) {
     set_permission("","zdata","everyone@");
     set_permission("","zdata","group@");
 
-    if(types == "students") {
+    if(types == STUDENT_GROUP) {
         set_permission("rca","xdata","g:"+types);
         set_permission("","ydata","g:"+types);
         set_permission("","zdata","g:"+types);
     }
 
-    if(types == "heads") {
+    if(types == HEAD_GROUP) {
         set_permission("rca","xdata","g:"+types);
         set_permission("rca","ydata","g:"+types);
         set_permission("rca","zdata","g:"+types);
     }
 
-    if(types == "educators") {
+    if(types ==EDUCATOR_GROUP) {
         set_permission("","xdata","g:"+types);
         set_permission("rca","ydata","g:"+types);
         set_permission("","zdata","g:"+types);
     }
 
-    if(types == "admins") {
+    if(types == ADMIN_GROUP) {
         set_permission("rwpaRc","xdata","g:"+types);
         set_permission("rwpaRc","ydata","g:"+types);
         set_permission("rwpaRc","zdata","g:"+types);
@@ -231,12 +233,26 @@ class Mainmenu {
             std::cout << "Current user:  " << user ; 
             std::cout <<"\n------------------------\n";
 
+
+            std::string group = utilities.get_popen("groups");
+	    string group_type="";
+            for(int i=group.length()-1;i>=0;i--)
+            {
+			if(int(group[i])==32)
+                           break;
+			else if(int(group[i])==10)
+				continue;
+			else
+			     group_type+=group[i];
+            }
+	    reverse(group_type.begin(),group_type.end());
+
             // Different types of users have different commands
             std::string X = "X", Y = "Y", Z = "Z";
 
             std::cout << magenta << std::endl;
 
-            if (user == ADMIN) {
+            if (group_type == ADMIN_GROUP) {
                 std::cout << "Hello " << ADMIN << "\n";
                 std::cout << "You have the permission to:\n";
                 std::cout << "1. \tView data in File X, File Y, File Z.\n";
@@ -297,21 +313,33 @@ class Mainmenu {
                         string type;
                         getline(cin, type);
                         if(type=="1") {
-                            our_user.add_user(HEAD, display_info);
-                            to_group("wheel", HEAD);
-                            to_group("heads", HEAD);
+			   std::cout << cyan << std::endl;
+			    string username;
+			    std::cout << "Enter the new username: ";
+			    getline(cin, username);
+                            our_user.add_user(username, display_info);
+                            to_group("wheel", username);
+                            to_group(HEAD_GROUP, username);
                         }
 
                         else if(type=="2") {
-                            our_user.add_user(EDUCATOR, display_info);
-                            to_group("wheel", EDUCATOR);
-                            to_group("educators", EDUCATOR);
+			   std::cout << cyan << std::endl;
+			    string username;
+			    std::cout << "Enter the new username: ";
+			    getline(cin, username);
+                            our_user.add_user(username, display_info);
+                            to_group("wheel", username);
+                            to_group(EDUCATOR_GROUP, username);
                         }
 
                         else if(type=="3") {
-                            our_user.add_user(STUDENT, display_info);
-                            to_group("wheel", STUDENT);
-                            to_group("students", STUDENT);
+			    std::cout << cyan << std::endl;
+			    string username;
+			    std::cout << "Enter the new username: ";
+			    getline(cin, username);
+                            our_user.add_user(username, display_info);
+                            to_group("wheel", username);
+                            to_group(STUDENT_GROUP, username);
                         }
 
                         std::cout << "\nEnter 1, if you want to add another user\n";
@@ -334,7 +362,7 @@ class Mainmenu {
                     our_user.delete_user(username);
                 }
             } 
-            else if (user == HEAD) {
+            else if (group_type == HEAD_GROUP) {
                 std::cout << "Hello " << HEAD << "\n";
                 std::cout << "You have the permission to:\n";
                 std::cout << "1. \tView the data in File X, File Y, File Z.\n";
@@ -364,7 +392,7 @@ class Mainmenu {
                 std::cout << "Data in File X: " << X << std::endl;
                 std::cout << "Data in File Y: " << Y << std::endl;
                 std::cout << "Data in File Z: " << Z << std::endl;
-            } else if (user == EDUCATOR) {
+            } else if (group_type == EDUCATOR_GROUP) {
 
                 std::cout << "Hello Educator\n";
                 std::cout << "You have the permission to:\n";
@@ -373,7 +401,7 @@ class Mainmenu {
                 Y = utilities.get_popen("cat ydata");
 
                 std::cout << "Data in File Y: " << Y << std::endl;
-            } else if (user == STUDENT) {
+            } else if (group_type == STUDENT_GROUP) {
 
                 std::cout << "Hello Student\n";
                 std::cout << "You have the permission to:\n";
@@ -385,15 +413,19 @@ class Mainmenu {
                 std::cout << "Data in File X: " << X << std::endl;
             } else {
                 // the starting user (eg:amit) that initiates the program and adds admin
-                add_new_group("students");
-                add_new_group("admins");
-                add_new_group("educators");
-                add_new_group("heads");
+                add_new_group(STUDENT_GROUP);
+                add_new_group(ADMIN_GROUP);
+                add_new_group(EDUCATOR_GROUP);
+                add_new_group(HEAD_GROUP);
 
                 std::cout << "\nIf " << ADMIN << " not found in above users list, please add the user: " << ADMIN << std::endl;
-                our_user.add_user(name, display_info);
-                to_group("wheel", ADMIN);
-                to_group("admins", ADMIN);
+        	string username;
+		std::cout << cyan << std::endl;
+		std::cout << "Enter the new username: ";
+		getline(cin, username);
+                our_user.add_user(username, display_info);
+                to_group("wheel", username);
+                to_group(ADMIN_GROUP, username);
             }
 
 
