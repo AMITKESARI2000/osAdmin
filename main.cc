@@ -253,7 +253,10 @@ class Mainmenu {
             std::cout << magenta << std::endl;
 
             if (group_type == ADMIN_GROUP) {
-                std::cout << "Hello " << ADMIN << "\n";
+                bool f = true;
+		while(f) {
+		std::cout << "Hello " << ADMIN << "\n";
+
                 std::cout << "You have the permission to:\n";
                 std::cout << "1. \tView data in File X, File Y, File Z.\n";
                 std::cout << "2. \tEdit data in File X, File Y, File Z.\n";
@@ -343,8 +346,9 @@ class Mainmenu {
                         }
 
                         std::cout << "\nEnter 1, if you want to add another user\n";
-                        std::cout << "Enter 2, if you want to exit\n";		
-                        char again = 'y';
+                        std::cout << "Enter 2, if you want to continue?\n";		
+                        cin.ignore();
+			char again = 'y';
                         again = getchar();
                         if(again=='2')
                             flag=false;
@@ -361,8 +365,15 @@ class Mainmenu {
                     getline(cin, username);
                     our_user.delete_user(username);
                 }
+		std::cout << "Do you want to continue? [y/N] \n";
+		char cont = getchar();
+		if (cont == 'N')
+			f = false;
+		}
             } 
             else if (group_type == HEAD_GROUP) {
+		bool f = true;
+		while( f ) {
                 std::cout << "Hello " << HEAD << "\n";
                 std::cout << "You have the permission to:\n";
                 std::cout << "1. \tView the data in File X, File Y, File Z.\n";
@@ -392,17 +403,30 @@ class Mainmenu {
                 std::cout << "Data in File X: " << X << std::endl;
                 std::cout << "Data in File Y: " << Y << std::endl;
                 std::cout << "Data in File Z: " << Z << std::endl;
-            } else if (group_type == EDUCATOR_GROUP) {
+                std::cout << "Do you want to continue? [y/N] \n";
+		char cont = getchar();
+		if (cont =='N')
+			f = false;
+	        }
+	    } else if (group_type == EDUCATOR_GROUP) {
 
-                std::cout << "Hello Educator\n";
+                bool f = true;
+		while(f) {
+		std::cout << "Hello Educator\n";
                 std::cout << "You have the permission to:\n";
                 std::cout << "\tView the data in File Y.\n";
 
                 Y = utilities.get_popen("cat ydata");
 
                 std::cout << "Data in File Y: " << Y << std::endl;
+		std::cout << "Do you want to continue? [y/N] \n";
+		char cont = getchar();
+		if (cont == 'N')
+			f = false;
+		}
             } else if (group_type == STUDENT_GROUP) {
-
+		bool f = true;
+		while(f) {
                 std::cout << "Hello Student\n";
                 std::cout << "You have the permission to:\n";
                 std::cout << "\tView the data in File X.\n";
@@ -411,6 +435,11 @@ class Mainmenu {
                 X =  utilities.get_popen("cat xdata");
 
                 std::cout << "Data in File X: " << X << std::endl;
+		std::cout << "Do you want to continue? [y/N] \n";
+		char cont = getchar();
+		if (cont == 'N')
+			f = false;
+		}
             } else {
                 // the starting user (eg:amit) that initiates the program and adds admin
                 add_new_group(STUDENT_GROUP);
