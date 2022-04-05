@@ -2,6 +2,8 @@
 #include <cstring>
 #include <iostream>
 #include <string>
+#include<unistd.h>
+#include <termios.h>
 using namespace std;
 
 const int BUFFSIZE = 512;
@@ -266,7 +268,6 @@ class Mainmenu {
                 y = getchar();
 
                 if(y == '1') {
-                    std::string filedata = utilities.get_popen("cat file.txt");
 
                     X = utilities.get_popen("cat xdata");
                     Y = utilities.get_popen("cat ydata");
@@ -367,28 +368,10 @@ class Mainmenu {
                 std::cout << "You have the permission to:\n";
                 std::cout << "1. \tView the data in File X, File Y, File Z.\n";
 
-                std::string filedata = utilities.get_popen("cat file.txt");
-
                 X = utilities.get_popen("cat xdata");
                 Y = utilities.get_popen("cat ydata");
                 Z = utilities.get_popen("cat zdata");
-                /*
-                   int cnt = 0;
 
-                   for (int i = 0; i < filedata.size(); i++) {
-                   if (filedata[i] == ';') {
-                   cnt++;
-                   continue;
-                   }
-                   if (cnt == 0) {
-                   X += filedata[i];
-                   } else if (cnt == 1) {
-                   Y += filedata[i];
-                   } else {
-                   Z += filedata[i];
-                   }
-                   }
-                   */
                 std::cout << "Data in File X: " << X << std::endl;
                 std::cout << "Data in File Y: " << Y << std::endl;
                 std::cout << "Data in File Z: " << Z << std::endl;
@@ -440,4 +423,5 @@ int main(int argc, char *argv[]) {
     Mainmenu mainmenu;
     // TODO:Have to check the user, how it will work as we already have "user"
 
+   return 0;
 }
