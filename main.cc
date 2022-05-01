@@ -159,14 +159,21 @@ class User {
 
 void add_new_group(string types) {
     string cmnd;
+    char *data[100] = {"/data/11", "/data/12", "/data/13", "/data/14", "/data/21", "/data/22", "/data/23", "/data/24", "/data/31", "/data/32", "/data/33", "/data/34", "/data/41", "/data/42", "/data/43", "/data/44", "xdata", "ydata", "zdata"};
     cmnd = "pw groupadd "+types;
     system(cmnd.c_str());
-    set_permission("","xdata","everyone@");
-    set_permission("","xdata","group@");
-    set_permission("","ydata","everyone@");
-    set_permission("","ydata","group@");
-    set_permission("","zdata","everyone@");
-    set_permission("","zdata","group@");
+    // set_permission("","xdata","everyone@");
+    // set_permission("","xdata","group@");
+    // set_permission("","ydata","everyone@");
+    // set_permission("","ydata","group@");
+    // set_permission("","zdata","everyone@");
+    // set_permission("","zdata","group@");
+    for(int i=0;i<=18;i++)
+    {
+        set_permission("",data[i],"everyone@");
+        set_permission("",data[i],"group@");
+    }
+
 
     if(types == STUDENT_GROUP) {
         set_permission("rca","xdata","g:"+types);
