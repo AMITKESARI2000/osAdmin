@@ -6,6 +6,7 @@
 #include <vector>
 #include <cstdio>
 
+
 using namespace std;
 
 #define BACKGROUND_PAIR 1
@@ -15,8 +16,8 @@ using namespace std;
 #define TEXT_PAIR 5
 const int BUFFSIZE = 512;
 
-const std::string names[100] = {"aditya", "amit", "anand", "sowmya"};
-const std::string educators[100] = {"edu1", "edu2", "edu3", "edu4"};
+vector<std::string> names = {"aditya", "amit", "anand", "sowmya"};
+vector<std::string> educators = {"edu1", "edu2", "edu3", "edu4"};
 
 WINDOW *create_newwin(int height, int width, int startY, int startX,
                       bool headerOn);
@@ -87,7 +88,32 @@ class Utilities {
 
 
 int main(int argc, char *argv[]) {
+    string studentsFilename = "../students.txt";
+    string educatorsFilename = "../educators.txt";
+
+    ifstream fin(studentsFilename, ios::in);
+
+    string stu;
+
+    names.clear();
+    educators.clear();
+    while(getline(fin, stu)){        
+ 	names.push_back(string(stu));
+
+    }
+     fin.close();
+
+    fin.open(educatorsFilename, ios::in);
+    string edu;
+   
+    while(getline(fin, edu)){
+ 	educators.push_back(edu);
+
+    }
+    fin.close();
+
     Utilities utilities;
+    const int tableRows = names.size() + 1, tableCols = educators.size() + 2;
     int startX, startY, tableWidth, tableHeight;
     int ch;
     initscr();  // Start curses mode
@@ -110,8 +136,8 @@ int main(int argc, char *argv[]) {
     tableHeight /= 2;
     tableWidth /= 2;
 
-    tableHeight = 4 * (tableHeight / 4);
-    tableWidth = 5 * (tableWidth / 5);
+    tableHeight = tableRows * (tableHeight / tableRows);
+    tableWidth = tableCols * (tableWidth / tableCols);
 
     mvprintw(
         1, 1,
@@ -139,7 +165,7 @@ int main(int argc, char *argv[]) {
         S3 7 5 4 8  12
         S4 4 7 9 9  25
     */
-    const int tableRows = 5, tableCols = 6;
+
     WINDOW *bigBox[tableRows][tableCols];
 
     int changeH = tableHeight / tableRows;
