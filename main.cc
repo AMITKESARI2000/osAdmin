@@ -23,6 +23,9 @@ const std::string cyan("\033[0;36m");
 const std::string magenta("\033[0;35m");
 const std::string reset("\033[0m");
 
+const std::string names[100]={"aditya","amit","anand","sowmya"};
+const std::string data[100] = {"./data/11", "./data/12", "./data/13", "./data/14", "./data/21", "./data/22", "./data/23", "./data/24", "./data/31", "./data/32", "./data/33", "./data/34", "./data/41", "./data/42", "./data/43", "./data/44", "xdata", "ydata", "zdata"};
+
 void set_permission(string permission,string filename,string group);
 
 class DisplayInfo {
@@ -159,7 +162,6 @@ class User {
 
 void add_new_group(string types) {
     string cmnd;
-    char *data[100] = {"/data/11", "/data/12", "/data/13", "/data/14", "/data/21", "/data/22", "/data/23", "/data/24", "/data/31", "/data/32", "/data/33", "/data/34", "/data/41", "/data/42", "/data/43", "/data/44", "xdata", "ydata", "zdata"};
     cmnd = "pw groupadd "+types;
     system(cmnd.c_str());
     // set_permission("","xdata","everyone@");
@@ -176,27 +178,44 @@ void add_new_group(string types) {
 
 
     if(types == STUDENT_GROUP) {
-        set_permission("rca","xdata","g:"+types);
-        set_permission("","ydata","g:"+types);
-        set_permission("","zdata","g:"+types);
+        // set_permission("rca","xdata","g:"+types);
+        // set_permission("","ydata","g:"+types);
+        // set_permission("","zdata","g:"+types);
+        for (int i = 0; i <= 18; i++)
+        {
+            set_permission("", data[i], "everyone@");
+            set_permission("", data[i], "group@");
+        }
     }
 
     if(types == HEAD_GROUP) {
-        set_permission("rca","xdata","g:"+types);
-        set_permission("rca","ydata","g:"+types);
-        set_permission("rca","zdata","g:"+types);
+        // set_permission("rca","xdata","g:"+types);
+        // set_permission("rca","ydata","g:"+types);
+        // set_permission("rca","zdata","g:"+types);
+        for (int i = 0; i <= 18; i++)
+        {
+            set_permission("rca",data[i], "g:" + types);
+        }
     }
 
     if(types ==EDUCATOR_GROUP) {
-        set_permission("","xdata","g:"+types);
-        set_permission("rca","ydata","g:"+types);
-        set_permission("","zdata","g:"+types);
+        // set_permission("","xdata","g:"+types);
+        // set_permission("rca","ydata","g:"+types);
+        // set_permission("","zdata","g:"+types);
+        for (int i = 0; i <= 18; i++)
+        {
+            set_permission("rca", data[i], "g:" + types);
+        }
     }
 
     if(types == ADMIN_GROUP) {
-        set_permission("rwpaRc","xdata","g:"+types);
-        set_permission("rwpaRc","ydata","g:"+types);
-        set_permission("rwpaRc","zdata","g:"+types);
+        // set_permission("rwpaRc","xdata","g:"+types);
+        // set_permission("rwpaRc","ydata","g:"+types);
+        // set_permission("rwpaRc","zdata","g:"+types);
+        for (int i = 0; i <= 18; i++)
+        {
+            set_permission("rwpaRc", data[i], "g:" + types);
+        }
     }
 
 } 
