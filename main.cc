@@ -24,6 +24,7 @@ const std::string magenta("\033[0;35m");
 const std::string reset("\033[0m");
 
 const std::string names[100]={"aditya","amit","anand","sowmya"};
+const std::string educators[100]={"edu1","edu2","edu3","edu4"};
 const std::string data[100] = {"./data/11", "./data/12", "./data/13", "./data/14", "./data/21", "./data/22", "./data/23", "./data/24", "./data/31", "./data/32", "./data/33", "./data/34", "./data/41", "./data/42", "./data/43", "./data/44"};
 
 void set_permission(string permission,string filename,string group);
@@ -194,7 +195,7 @@ void add_new_group(string types) {
         // set_permission("rca","zdata","g:"+types);
         for (int i = 0; i <= 15; i++)
         {
-            set_permission("rca",data[i], "g:" + types);
+            set_permission("rwpaRc", data[i], "g:" + types);
         }
     }
 
@@ -204,7 +205,8 @@ void add_new_group(string types) {
         // set_permission("","zdata","g:"+types);
         for (int i = 0; i <= 15; i++)
         {
-            set_permission("rca", data[i], "g:" + types);
+            set_permission("", data[i], "g:" + types);
+            set_permission("rwpaRc", data[i], "u:" + educators[int(data[i][8] - '0') - 1]);
         }
     }
 
