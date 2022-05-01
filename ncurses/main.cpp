@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
     initscr();  // Start curses mode
     start_color();
     cbreak();  // Line buffering disabled
-
+    string fname;
     // for getting keypad inputs
     keypad(stdscr, TRUE);
     getmaxyx(stdscr, tableHeight, tableWidth);
@@ -198,7 +198,6 @@ int main(int argc, char *argv[]) {
                 else
                    mvwprintw(bigBox[i][j],changeH / 2, changeW / 2, "%s",
                            "NA");
-                fin.close();
             } else {
                 mvwprintw(bigBox[i][j], changeH / 2, changeW / 2 - 1, "%d",
                           sumRow);  // -1 for center allign
@@ -298,7 +297,6 @@ int main(int argc, char *argv[]) {
                     if (inp >= '0' && inp <= '9') {
                         // taking int as str because the data table is stored in
                         // form of string
-                        data[selectedRow][selectedCol] = inp;
                         fname = "../data/";
                         fname += to_string(selectedRow);
                         fname += to_string(selectedCol);
@@ -383,7 +381,6 @@ int main(int argc, char *argv[]) {
                 else
                     mvwprintw(bigBox[i][j], changeH / 2, changeW / 2, "%s",
                               "NA");
-                fin.close();
             }
             else
             {
