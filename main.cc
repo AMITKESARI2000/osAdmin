@@ -263,7 +263,7 @@ class Mainmenu {
 
 
             std::string group = utilities.get_popen("groups");
-	    string group_type="";
+	        string group_type="";
             for(int i=group.length()-1;i>=0;i--)
             {
 			if(int(group[i])==32)
