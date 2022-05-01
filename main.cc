@@ -183,8 +183,8 @@ void add_new_group(string types) {
         // set_permission("","zdata","g:"+types);
         for (int i = 0; i <= 18; i++)
         {
-            set_permission("", data[i], "everyone@");
-            set_permission("", data[i], "group@");
+            set_permission("", data[i], "g:" + types);
+            set_permission("rca",data[i],"u:",names[int(data[i][0])])
         }
     }
 
